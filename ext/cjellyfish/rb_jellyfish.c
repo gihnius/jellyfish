@@ -9,7 +9,7 @@ VALUE method_jaro_winkler(VALUE, VALUE, VALUE, VALUE);
 VALUE method_jaro_distance(VALUE, VALUE, VALUE);
 VALUE method_hamming_distance(VALUE, VALUE, VALUE);
 VALUE method_levenshtein_distance(VALUE, VALUE, VALUE);
-VALUE method_damerau_levenshtein_distance(VALUE, VALUE, VALUE);
+VALUE method_damerau_levenshtein_distance(VALUE, VALUE, VALUE, VALUE, VALUE);
 VALUE method_soundex(VALUE, VALUE);
 VALUE method_metaphone(VALUE, VALUE);
 VALUE method_nysiis(VALUE, VALUE);
@@ -22,7 +22,7 @@ void Init_jellyfish() {
     rb_define_method(jellyfish, "jaro_distance", method_jaro_distance, 2);
     rb_define_method(jellyfish, "hamming_distance", method_hamming_distance, 2);
     rb_define_method(jellyfish, "levenshtein_distance", method_levenshtein_distance, 2);
-    rb_define_method(jellyfish, "damerau_levenshtein_distance", method_damerau_levenshtein_distance, 2);
+    rb_define_method(jellyfish, "damerau_levenshtein_distance", method_damerau_levenshtein_distance, 4);
     rb_define_method(jellyfish, "soundex", method_soundex, 1);
     rb_define_method(jellyfish, "metaphone", method_metaphone, 1);
     rb_define_method(jellyfish, "nysiis", method_nysiis, 1);
@@ -48,8 +48,8 @@ VALUE method_levenshtein_distance(VALUE self, VALUE str1, VALUE str2) {
     return levenshtein_distance(RSTRING_PTR(str1), RSTRING_PTR(str2));
 }
 
-VALUE method_damerau_levenshtein_distance(VALUE self, VALUE str1, VALUE str2) {
-    return damerau_levenshtein_distance(RSTRING_PTR(str1), RSTRING_PTR(str2));
+VALUE method_damerau_levenshtein_distance(VALUE self, VALUE str1, VALUE str2, VALUE len1, VALUE len2) {
+  return damerau_levenshtein_distance(RSTRING_PTR(str1), RSTRING_PTR(str2), NUM2UINT(len1), NUM2UINT(len2));
 }
 
 VALUE method_soundex(VALUE self, VALUE str) {

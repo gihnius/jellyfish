@@ -10,7 +10,7 @@
 char* metaphone(const char *str)
 {
     const char *s;
-    char c, next, temp = '\0';
+    char c, next, nextnext, temp = '\0';
 
     // Worst case (a string of all x's) will result in a
     // metaphone twice as large as the original string
@@ -40,6 +40,7 @@ char* metaphone(const char *str)
     for (s = str, r = result; next; s++) {
         c = next;
         next = tolower(*(s + 1));
+        nextnext = tolower(*(s + 2));
 
         if (c == next && c != 'c') {
             continue;
@@ -61,7 +62,7 @@ char* metaphone(const char *str)
             }
             break;
         case 'c':
-            if ((next == 'i' && tolower(*(s + 2)) == 'a') || next == 'h') {
+            if ((next == 'i' && nextnext == 'a') || next == 'h') {
                 *r++ = 'X';
                 next = tolower(*(++s + 1));
             } else if (next == 'i' || next == 'e' || next == 'y') {
@@ -72,8 +73,8 @@ char* metaphone(const char *str)
             }
             break;
         case 'd':
-            if (next == 'g' && ((temp = *(s + 2)) == 'e' || temp == 'y' ||
-                                temp == 'i')) {
+            if (next == 'g' && (nextnext == 'e' || nextnext == 'y' ||
+                                nextnext == 'i')) {
                 *r++ = 'J';
                 s += 2;
                 next = tolower(*(s + 1));
@@ -89,12 +90,9 @@ char* metaphone(const char *str)
                 *r++ = 'J';
             } else if(next != 'h' && next != 'n') {
                 *r++ = 'K';
-            } else if(next == 'h' && (temp = tolower(*(s + 2))) &&
-                      !(ISVOWEL(temp))) {
+            } else if(next == 'h' && !(ISVOWEL(nextnext))) {
                 s++;
                 next = tolower(*(s + 1));
-            } else if(next != 'n') {
-                *r++ = 'K';
             }
             break;
         case 'h':
@@ -138,8 +136,7 @@ char* metaphone(const char *str)
             if (next == 'h') {
                 *r++ = 'X';
                 next = tolower(*(++s + 1));
-            } else if (next == 'i' && (temp = tolower(*(s + 2))) &&
-                       (temp == 'o' || temp == 'a')) {
+            } else if (next == 'i' && (nextnext == 'o' || nextnext == 'a')) {
                 *r++ = 'X';
                 s += 2;
                 next = tolower(*(s + 1));
@@ -148,13 +145,12 @@ char* metaphone(const char *str)
             }
             break;
         case 't':
-            if (next == 'i' && ((temp = tolower(*(s + 2))) == 'a' ||
-                                temp == 'o')) {
+            if (next == 'i' && (nextnext == 'a' || nextnext == 'o')) {
                 *r++ = 'X';
             } else if(next == 'h') {
                 *r++ = '0';
                 next = tolower(*(++s + 1));
-            } else if(next != 'c' || (temp = tolower(*(s + 2))) != 'h') {
+            } else if(next != 'c' || nextnext != 'h') {
                 *r++ = 'T';
             }
             break;
@@ -171,9 +167,7 @@ char* metaphone(const char *str)
             break;
         case 'x':
             if (s == str) {
-                if (next == 'h' || (next == 'i' &&
-                                    (temp = tolower(*(s + 2))) &&
-                                    (temp == 'o' || temp == 'a'))) {
+                if (next == 'h' || (next == 'i' && (nextnext == 'o' || nextnext == 'a'))) {
                     *r++ = 'X';
                 } else {
                     *r++ = 'S';

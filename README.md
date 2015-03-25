@@ -23,7 +23,7 @@ Or install it yourself as:
 ```ruby
 require 'jellyfish'
 
-include Jellyfish
+include JellyFish
 
 levenshtein_distance('jellyfish', 'smellyfish')
 jaro_distance('jellyfish', 'smellyfish')
