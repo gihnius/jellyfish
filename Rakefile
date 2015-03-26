@@ -5,8 +5,8 @@ require 'rake/testtask'
 GEMSPEC = Gem::Specification.load(File.expand_path("../jellyfish.gemspec", __FILE__))
 
 Rake::ExtensionTask.new('cjellyfish', GEMSPEC) do |ext|
-  ext.name    = 'jellyfish'
-  ext.lib_dir = 'lib/jellyfish'
+  ext.name    = 'cjellyfish'
+  ext.lib_dir = 'lib/cjellyfish'
 end
 
 Rake::TestTask.new do |t|

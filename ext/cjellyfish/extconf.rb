@@ -1,6 +1,6 @@
 require 'mkmf'
 
-extension_name = 'jellyfish'
+extension_name = 'cjellyfish'
 
 dir_config(extension_name)
 

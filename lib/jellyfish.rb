@@ -1,2 +1,1 @@
-require 'jellyfish/jellyfish'
-require 'jellyfish/version'
+require 'cjellyfish/cjellyfish'

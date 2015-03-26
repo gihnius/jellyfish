@@ -3,7 +3,7 @@
 
 VALUE jellyfish = Qnil;
 
-void Init_jellyfish();
+void Init_cjellyfish();
 
 VALUE method_jaro_winkler(VALUE, VALUE, VALUE, VALUE);
 VALUE method_jaro_distance(VALUE, VALUE, VALUE);
@@ -16,7 +16,7 @@ VALUE method_nysiis(VALUE, VALUE);
 VALUE method_match_rating_codex(VALUE, VALUE);
 VALUE method_match_rating_comparison(VALUE, VALUE, VALUE);
 
-void Init_jellyfish() {
+void Init_cjellyfish() {
     jellyfish = rb_define_module("JellyFish");
     rb_define_method(jellyfish, "jaro_winkler", method_jaro_winkler, 3);
     rb_define_method(jellyfish, "jaro_distance", method_jaro_distance, 2);
