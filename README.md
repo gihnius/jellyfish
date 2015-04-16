@@ -23,17 +23,26 @@ Or install it yourself as:
 ```ruby
 require 'jellyfish'
 
+# include in your class
 include JellyFish
 
 levenshtein_distance('jellyfish', 'smellyfish')
 jaro_distance('jellyfish', 'smellyfish')
 metaphone('Jellyfish')
 
+# stemmer
+stemmer = JellyFish::Stemmer.new
+# or after included
+stemmer = Stemmer.new
+
+stemmer.stem "riding"
+stemmer.stem "fish"
+
 ```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/jellyfish/fork )
+1. Fork it ( https://github.com/gihnius/jellyfish/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
