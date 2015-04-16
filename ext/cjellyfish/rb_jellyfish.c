@@ -1,4 +1,5 @@
-#include "ruby.h"
+#include <ruby.h>
+
 #include "jellyfish.h"
 
 VALUE jellyfish = Qnil;
@@ -16,6 +17,8 @@ VALUE method_nysiis(VALUE, VALUE);
 VALUE method_match_rating_codex(VALUE, VALUE);
 VALUE method_match_rating_comparison(VALUE, VALUE, VALUE);
 
+VALUE method_stem(VALUE, VALUE);
+
 void Init_cjellyfish() {
     jellyfish = rb_define_module("JellyFish");
     rb_define_method(jellyfish, "jaro_winkler", method_jaro_winkler, 3);
@@ -28,6 +31,9 @@ void Init_cjellyfish() {
     rb_define_method(jellyfish, "nysiis", method_nysiis, 1);
     rb_define_method(jellyfish, "match_rating_codex", method_match_rating_codex, 1);
     rb_define_method(jellyfish, "match_rating_comparison", method_match_rating_comparison, 2);
+
+    VALUE jf_stemmer = rb_define_class_under(jellyfish, "Stemmer", rb_cObject);
+    rb_define_method(jf_stemmer, "stem", method_stem, 1);
 }
 
 VALUE method_jaro_winkler(VALUE self, VALUE str1, VALUE str2, VALUE long_tolerance) {
@@ -49,7 +55,7 @@ VALUE method_levenshtein_distance(VALUE self, VALUE str1, VALUE str2) {
 }
 
 VALUE method_damerau_levenshtein_distance(VALUE self, VALUE str1, VALUE str2, VALUE len1, VALUE len2) {
-  return damerau_levenshtein_distance(RSTRING_PTR(str1), RSTRING_PTR(str2), NUM2UINT(len1), NUM2UINT(len2));
+    return damerau_levenshtein_distance(RSTRING_PTR(str1), RSTRING_PTR(str2), NUM2UINT(len1), NUM2UINT(len2));
 }
 
 VALUE method_soundex(VALUE self, VALUE str) {
@@ -70,4 +76,31 @@ VALUE method_match_rating_codex(VALUE self, VALUE str) {
 
 VALUE method_match_rating_comparison(VALUE self, VALUE str1, VALUE str2) {
     return match_rating_comparison(RSTRING_PTR(str1), RSTRING_PTR(str2));
+}
+
+/* copied from porter.c */
+struct stemmer {
+	char * b;       /* buffer for word to be stemmed */
+	int k;          /* offset to the end of the string */
+	int j;          /* a general offset into the string */
+};
+
+// stemmer instance method
+VALUE method_stem(VALUE self, VALUE b) {
+	size_t length, i;
+	char *word;
+	struct stemmer z;
+	VALUE str, rv;
+
+	str = StringValue(b);
+	word = malloc(RSTRING_LEN(str) + 1);
+	strncpy(word, RSTRING_PTR(str), RSTRING_LEN(str));
+	word[RSTRING_LEN(str)] = '\0';
+
+	length  = stem(&z, word, strlen(word)-1);
+	word[length+1] = 0;
+	rv = rb_str_new2(word);
+	free(word);
+
+	return rv;
 }
